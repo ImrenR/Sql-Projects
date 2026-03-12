@@ -1,75 +1,76 @@
+USE javacan;
 
-	CREATE TABLE bolumler (
-      bolum_id   CHAR(10) PRIMARY KEY,
-      bolum_isim VARCHAR(14),
-      konum      VARCHAR(13)
-      --  CONSTRAINT bolum_pk PRIMARY KEY(bolum_id)
-    );
-    
-    INSERT INTO bolumler VALUES (10,'MUHASABE','IST');
-    INSERT INTO bolumler VALUES (20,'MUDURLUK','ANKARA');
-    INSERT INTO bolumler VALUES (30,'SATIS','IZMIR');
-    INSERT INTO bolumler VALUES (40,'ISLETME','BURSA');
-    INSERT INTO bolumler VALUES (50,'DEPO', 'YOZGAT');
-    
-      CREATE TABLE  personel(
-      personel_id   INT(4), 
-      personel_isim VARCHAR(10),
-      meslek        VARCHAR(9),
-      mudur_id      INT(4),
-      ise_baslama   DATE,
-      maas          INT(7.2),
-      bolum_id      INT(2),
-      CONSTRAINT personel_pk   PRIMARY KEY(personel_id)
-    );
-    
+-- Create departments table
+CREATE TABLE departments (
+    department_id CHAR(10) PRIMARY KEY,
+    department_name VARCHAR(14),
+    location VARCHAR(13)
+    -- CONSTRAINT department_pk PRIMARY KEY(department_id)
+);
 
-  
-    INSERT INTO personel VALUES (7369,'AHMET','KATIP',7902,'17-12-1980',800,20);
-    INSERT INTO personel VALUES (7499,'BAHATTIN','SATIS',7698,'20-2-1981',1600,30);
-    INSERT INTO personel VALUES (7521,'NESE','SATIS',7698,'22-2-1981',1250,30);
-    INSERT INTO personel VALUES (7566,'MUZAFFER','MUDUR',7839,'2-4-1981',2975,20);
-    INSERT INTO personel VALUES (7654,'MUHAMMET','SATIS',7698,'28-9-1981',1250,30);
-    INSERT INTO personel VALUES (7698,'EMINE','MUDUR',7839,'1-5-1981',2850,30);
-    INSERT INTO personel VALUES (7782,'HARUN','MUDUR',7839,'9-6-1981', 2450,10);
-    INSERT INTO personel VALUES (7788,'MESUT','ANALIST',7566,'13-07-87',3000,20);
-    INSERT INTO personel VALUES (7839,'SEHER','BASKAN',NULL,'17-11-1981',5000,10);
-    INSERT INTO personel VALUES (7844,'DUYGU','SATIS',7698,'8-9-1981',1500,30);
-    INSERT INTO personel VALUES (7876,'ALI','KATIP',7788,'13-07-87',1100,20);
-    INSERT INTO personel VALUES (7900,'MERVE','KATIP',7698,'3-12-1981',950,30);
-    INSERT INTO personel VALUES (7902,'NAZLI','ANALIST',7566,'3-12-1981',3000,20);
-    INSERT INTO personel VALUES (7934,'EBRU','KATIP',7782,'23-1-1982',1300,10);
-    INSERT INTO personel VALUES (7956,'SIBEL','MIMAR',7782,'29-1-1991',3300,60);
-    INSERT INTO personel VALUES (7933,'ZEKI','MUHENDIS',7782,'26-1-1987',4300,60);
-     
- select * from personel;
- select * from bolumler;
- 
- /* -----------------------------------------------------------------------------
-  Task01 -> SATIS ve MUHASABE bolumlerinde calisan personelin isimlerini ve 
-  bolumlerini, once bolum sonra isim sıralı olarak listeleyiniz
-------------------------------------------------------------------------------*/ 
+-- Insert sample departments
+INSERT INTO departments VALUES ('10','ACCOUNTING','IST');
+INSERT INTO departments VALUES ('20','MANAGEMENT','ANKARA');
+INSERT INTO departments VALUES ('30','SALES','IZMIR');
+INSERT INTO departments VALUES ('40','BUSINESS','BURSA');
+INSERT INTO departments VALUES ('50','WAREHOUSE','YOZGAT');
 
-	SELECT P.personel_isim, B.bolum_isim 
-	FROM bolumler B 
-	JOIN personel P 
-	ON B.bolum_id = P.bolum_id
-	WHERE B.bolum_id IN(10,30)
-	ORDER BY B.bolum_isim, p.personel_isim;
-    
-  
-/* -----------------------------------------------------------------------------
-  Task02 -> SATIS,ISLETME ve DEPO bolumlerinde calisan personelin isimlerini,  
-  bolumlerini ve ise_baslama tarihlerini isim sıralı olarak listeleyiniz. 
-  NOT: calisani olmasa bile bolum ismi gosterilmelidir.
-------------------------------------------------------------------------------*/  
+-- Create personnel table
+CREATE TABLE personnel (
+    personnel_id INT(4),
+    personnel_name VARCHAR(10),
+    job_title VARCHAR(9),
+    manager_id INT(4),
+    start_date DATE,
+    salary INT(7.2),
+    department_id INT(2),
+    CONSTRAINT personnel_pk PRIMARY KEY(personnel_id)
+);
 
-	 SELECT B.bolum_isim, P.personel_isim, P.ise_baslama
-	 FROM bolumler B
-	 LEFT JOIN personel P
-	 ON P.bolum_id=B.bolum_id
-	 WHERE B.bolum_ıd IN (40,30,50)
-	 ORDER BY B.bolum_isim;
-     
-     commit;
-     SELECT personel_isim FROM personel WHERE personel_id=7369;
+-- Insert sample personnel data
+INSERT INTO personnel VALUES (7369,'AHMET','CLERK',7902,'1980-12-17',800,20);
+INSERT INTO personnel VALUES (7499,'BAHATTIN','SALES',7698,'1981-02-02',1600,30);
+INSERT INTO personnel VALUES (7521,'NESE','SALES',7698,'1981-02-22',1250,30);
+INSERT INTO personnel VALUES (7566,'MUZAFFER','MANAGER',7839,'1981-02-04',2975,20);
+INSERT INTO personnel VALUES (7654,'MUHAMMET','SALES',7698,'1981-09-09',1250,30);
+INSERT INTO personnel VALUES (7698,'EMINE','MANAGER',7839,'1981-01-05',2850,30);
+INSERT INTO personnel VALUES (7782,'HARUN','MANAGER',7839,'1981-09-06',2450,10);
+INSERT INTO personnel VALUES (7788,'MESUT','ANALYST',7566,'1987-12-07',3000,20);
+INSERT INTO personnel VALUES (7839,'SEHER','PRESIDENT',NULL,'1981-11-17',5000,10);
+INSERT INTO personnel VALUES (7844,'DUYGU','SALES',7698,'1981-08-09',1500,30);
+INSERT INTO personnel VALUES (7876,'ALI','CLERK',7788,'1987-07-13',1100,20);
+INSERT INTO personnel VALUES (7900,'MERVE','CLERK',7698,'1981-03-12',950,30);
+INSERT INTO personnel VALUES (7902,'NAZLI','ANALYST',7566,'1981-03-12',3000,20);
+INSERT INTO personnel VALUES (7934,'EBRU','CLERK',7782,'1982-01-23',1300,10);
+INSERT INTO personnel VALUES (7956,'SIBEL','ARCHITECT',7782,'1991-01-29',3300,60);
+INSERT INTO personnel VALUES (7933,'ZEKI','ENGINEER',7782,'1987-01-26',4300,60);
+
+-- View data
+SELECT * FROM personnel;
+SELECT * FROM departments;
+
+-- -----------------------------------------------------------------------------
+-- Task01 -> List names and departments of personnel working in SALES and ACCOUNTING
+--           Sorted first by department, then by personnel name
+-- -----------------------------------------------------------------------------
+SELECT d.department_name,
+       p.personnel_name
+FROM departments d
+JOIN personnel p
+    ON d.department_id = p.department_id
+WHERE d.department_name IN ('SALES','ACCOUNTING')  -- only these departments
+ORDER BY d.department_name, p.personnel_name;       -- first by department, then by name
+
+-- -----------------------------------------------------------------------------
+-- Task02 -> List names, departments, and start dates of personnel working in
+--           SALES, BUSINESS, and WAREHOUSE. Sorted by personnel name.
+--           Note: Even if no personnel exists in a department, the department name should be shown
+-- -----------------------------------------------------------------------------
+SELECT p.personnel_name,
+       d.department_name,
+       p.start_date
+FROM departments d
+JOIN personnel p
+    ON d.department_id = p.department_id
+WHERE d.department_name IN ('SALES','BUSINESS','WAREHOUSE')
+ORDER BY p.personnel_name;
