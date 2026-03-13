@@ -1,58 +1,85 @@
-drop table if exists daily_sales;
+drop table if exists products;
+drop table if exists product_group;
 
-CREATE TABLE daily_sales (
-  person_name VARCHAR(100),
-  brand VARCHAR(50),
-  number_sales INT
-);
+create table product_group (
+g_code 	  char(7) primary key not null,
+g_name 	  varchar(45),
+p_manager varchar(45) default 'tanımlanmadı' );
 
-INSERT INTO daily_sales VALUES
-('Ahmet', 'Asus', 55), ('Ayşe', 'Dell', 10), ('Kamil', 'Dell', 78), ('Ahmet', 'HP', 3),	
-('Ahmet', 'HP', 10),	   ('Ahmet', 'Asus', 18), ('Ayşe', 'Lenovo', 61), ('Kamil', 'Asus', 180),	
-('Ahmet', 'HP', 14),	  ('Ayşe', 'Asus', 45), ('Ahmet', 'Asus', 87), ('Ahmet', 'Dell', 34),
-('Ayşe', 'HP', 4), 	('Kamil', 'Lenovo', 58),('Kamil', 'Dell', 7), ('Ahmet', 'HP', 11),	
-('Ahmet', 'Lenovo', 8), ('Ahmet', 'Asus', 37),	('Ayşe', 'Asus', 68),	('Kamil', 'Dell', 54),	
-('Ahmet', 'HP', 81),  ('Ayşe', 'Asus', 5),	('Ahmet', 'Asus', 46),	('Ahmet', 'Dell', 11),
-('Ayşe', 'HP', 85),	('Kamil', 'Asus', 43), ('Ayşe', 'Lenovo', 10),	('Ahmet', 'Asus', 5),
-('Ahmet', 'Dell', 16), ('Ayşe', 'HP', 1), 	('Kamil', 'Lenovo', 5),	('Kamil', 'Dell', 51),	
-('Ahmet', 'HP', 76),	('Ahmet', 'Lenovo', 48),('Ahmet', 'Asus', 11),	('Ayşe', 'Asus', 3),
-('Kamil', 'Lenovo', 63),('Ahmet', 'HP', 81),	('Ayşe', 'Asus', 85),	('Ahmet', 'Asus', 10),	
-('Ahmet', 'Dell', 47),	('Ayşe', 'Lenovo', 63),	('Kamil', 'Asus', 8);
-SELECT * FROM daily_sales;
--- task01 ->  Kişi bazında satışları toplamlarını gruplayınız, aşağıdaki şekilde listeleyen query create ediniz.
--- NAME		Asus	HP		Dell	Lenovo
--- Ahmet	269		276		108		56
--- Ayşe		206		90		10		134
--- Kamil	231		0		190		126
-select person_name ISIM, 
-sum(case when brand='Asus' then number_sales else 0 end) as Asus, 
-sum(case when brand='Hp' then number_sales else 0 end)as Hp,
-sum(case when brand='Dell' then number_sales else 0 end) as Dell,
-sum(case when brand='Lenovo' then number_sales else 0 end) as Lenovo 
-from daily_sales group by person_name;
+create table products (
+p_code varchar(20) unique not null,
+p_name varchar(45),
+g_code char(7) ,
+g_renk varchar(10),
+fiyat int,
+CONSTRAINT group_fk FOREIGN KEY (g_code) REFERENCES product_group(g_code) );
 
--- task02 ->  Marka bazında satışları toplamlarını gruplayınız, aşağıdaki şekilde listeleyen query create ediniz.
--- BRAND	Ahmet	Ayşe	Kamil	
--- Asus		269		206		231
--- Dell		108		10		190
--- HP		276		90		0
--- Lenovo	56		134		126
-select brand,
-sum(case when person_name='Ahmet' then number_sales else 0 end) as Ahmet,
-sum(case when person_name='Ayse' then number_sales else 0 end) as Ayse,
-sum(case when person_name='Kamil' then number_sales else 0 end) as Kamil
-from daily_sales group by brand;
+insert into product_group (g_code,g_name) values 
+('DT','DeskTop'),('LT','LapTop'),('MP','MobilePhone'),('PR','Printer');  
 
--- task03 -> markaların kişi bazlı günlük satış ortalamalarını listeleyen query create ediniz.
-select brand,
-avg(case when person_name='Ahmet' then number_sales else 0 end) as Ahmet,
-avg(case when person_name='Ayse' then number_sales else 0 end) as Ayse,
-avg(case when person_name='Kamil' then number_sales else 0 end) as Kamil
-from daily_sales group by brand;
+insert into products(p_code,p_name,g_code,fiyat) values 
+('AS01', 'Asus 14" Notebook', 	'LT',450),('AS15', 'Asus 15" Notebook', 	'LT',650),
+('D151', 'Dell 15" Notebook',  	'LT',550),('DT01','Asus Desktop Computer',	'DT',480),
+('AP70', 'Asus Mobile phone ',  'MP',300),('DT02','Asus Desktop Computer',	'DT',460),
+('AP20', 'Asus MMobile Phone',	'MP',290),('DT03','HP Desktop Computer',	'DT',440),
+('HP05', 'HP 17" Notebook',    	'LT',600),('DT04','Dell Desktop Computer',	'DT',390),
+('AS05', 'Asus 15" Notebook',  	'LT',570),('DT05','Dell Desktop Computer',	'DT',395),
+('BL13', 'Brother Lazer Printr','PR',120),('DT06','Zenon Desktop Computer',	'DT',475),
+('IJ10', 'HP InkJet Printer',  	'PR', 70),('DT07','Dell Desktop Computer',	'DT',495),
+('LZ30', 'HP Lazer Printer',   	'PR', 99),('DT08','HP Desktop Computer',	'DT',500);
 
--- task04 -> ahmet ve ayşenin satışlarından oluşan sanal bir tablo create ediniz.
-drop view if exists ahmet_ayse;
+-- task01 -> products table a marka column ekleyiniz
+alter table products add marka varchar(20);
 
-create view ahmet_ayse as select * from daily_sales where person_name in ('Ahmet', 'Ayşe');
-select * from ahmet_ayse order by person_name;
+-- task02 -> product_group , g_name  i, varchar(20) olarak update edin
 
+alter table product_group modify column g_name varchar(20);
+
+-- task03 -> pruducts table renk column silin
+alter table products drop column g_renk;
+
+-- task04 -> product_group , g_name i group_name olarak değiştirin.
+Alter table product_group rename column g_name to group_name;
+
+-- task05 -> product_group , group_name i g_name varchar(15) olarak değiştirin.
+
+alter table product_group change group_name g_name varchar(15);
+
+-- task06 -> kaç adet masaüstü(DT) ve  Laptop (LT) bilgisayar vardır listeleyen query create ediniz.
+select count(p_code) from products where g_code='DT' or g_code='LT';
+select COUNT(p_code) from products where g_code in ( 'DT', 'LT');
+
+-- task07 -> Laptoplaın fiyatları toplamı listeleyen query create ediniz.
+select sum(fiyat) from products where g_code = "LT";
+
+-- task08 ->) Printer ortalama fiyatı listeleyen query create ediniz.
+select avg(fiyat) from products where g_code = "PR";
+
+-- task09 -> En ucuz ürünü listeleyen query create ediniz.
+select min(fiyat) from products where g_code='DT';
+select * from products where fiyat = (select min(fiyat) from products);
+
+-- task10 ->  En ucuz DeskTop  listeleyen query create ediniz.
+select * from products where fiyat = (select min(fiyat) from products where g_code='DT');
+
+-- task11 -> Her ürün grubundan kaç adet ürün vardır listeleyen query create ediniz..
+select g_code, count(*) from products group by g_code;
+
+-- task12 -> Her bir ürün grubundaki en ucuz ürünleri listeleyen query create ediniz.
+select g_code, min(fiyat) from products group by g_code;
+
+-- task13 -> ustteki soru g_name ile yapın 
+
+select g_code as KOD, ( select g_name from product_group 
+where product_group.g_code=products.g_code) as Gurup,  
+min(fiyat) as En_ucuz from products group by g_code;
+
+-- task14 -> (11 soru) Her ürün grubundan kaç adet ürün vardır listeleyen query create ediniz.(g name ile)
+
+select g_code, ( select g_name from product_group 
+where product_group.g_code=products.g_code) as Gurup, count(*) from products group by g_code;
+
+-- task15 ->) Her ürün grubundan kaç adet ürün vardır ve ortalma fiyatları nedir listeleyen query create ediniz.
+
+select g_code,( select g_name from product_group 
+where product_group.g_code=products.g_code) as Gurup, count(g_code) , avg(fiyat) from products group by g_code;

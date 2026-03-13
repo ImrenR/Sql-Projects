@@ -70,42 +70,22 @@ VALUES
     
 
 -- Tüm kitapların listesini getiren sorguyu yazınız	
-  select * from KITAPLAR;
+
 
 -- George Orwell a ait kitapları listeleyen sorguyu yazınız
-   select *
-   from kitaplar
-   where yazar='George Orwell';
+  
    
 -- İskender Pala ya ait kitapları listeleyen sorguyu yazınız		
-    select *
-   from kitaplar
-   where yazar='İskender Pala';     
+     
       
 -- Kaynağı Yabancı olan kitapları listeleyiniz
-   select *
-   from kitaplar
-   where kaynak='yabanci';             
+            
          
 -- Mart ayında alınan kitapları listeleyiniz
-            select * 
-            from kitaplar
-            -- where kitap_id in (select kitap_id from dokum where Alim_tarihi>='2021-03-1' and  Alim_tarihi<='2021-03-31');
-            where kitap_id in (select kitap_id from dokum where MONTH(Alim_tarihi)=3);
-            
-select *
-            from kitaplar
-            join dokum
-            on dokum.kitap_id = kitaplar.kitap_id
-            where month(alim_tarihi)=3;
-            SELECT YEAR('2021-02-28') AS yil;
+     
 
 
 
-
-
-SELECT MONTH('2021-02-28') AS ay;
-SELECT DAY('2021-02-28') AS gun;
             
 -- Teslim edilmeyen kitapları ve kimde olduklarını listeleyiniz
                

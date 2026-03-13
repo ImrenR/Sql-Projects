@@ -1,85 +1,116 @@
-drop table if exists products;
-drop table if exists product_group;
+CREATE TABLE OGRENCILER
+(
+Ogrenci_No CHAR(4) PRIMARY KEY, 
+Adi_Soyadi VARCHAR(50) UNIQUE,
+Sinif CHAR(3)
+);
 
-create table product_group (
-g_code 	  char(7) primary key not null,
-g_name 	  varchar(45),
-p_manager varchar(45) default 'tanımlanmadı' );
+INSERT INTO OGRENCILER VALUES('523', 'Ali Akbulut' ,'10');
+INSERT INTO OGRENCILER VALUES('487', 'Merve Can' ,'12');
+INSERT INTO OGRENCILER VALUES('125', 'Kemal Gür' ,'9');
+INSERT INTO OGRENCILER VALUES('885', 'Ayşe Atar','11');
+INSERT INTO OGRENCILER VALUES('754', 'Merve Gül' ,'10');
+INSERT INTO OGRENCILER VALUES('854', 'Ahmet Arık' ,'9');
+INSERT INTO OGRENCILER VALUES('741', 'Mehmet Pehlivan' ,'11');
+INSERT INTO OGRENCILER VALUES('562', 'Can Demir' ,'12');
+INSERT INTO OGRENCILER VALUES('965', 'Kemal Can' ,'9');
 
-create table products (
-p_code varchar(20) unique not null,
-p_name varchar(45),
-g_code char(7) ,
-g_renk varchar(10),
-fiyat int,
-CONSTRAINT group_fk FOREIGN KEY (g_code) REFERENCES product_group(g_code) );
 
-insert into product_group (g_code,g_name) values 
-('DT','DeskTop'),('LT','LapTop'),('MP','MobilePhone'),('PR','Printer');  
+CREATE TABLE KITAPLAR (
+    Kitap_ID INT PRIMARY KEY AUTO_INCREMENT,
+    KitapAdi VARCHAR(255) NOT NULL,
+    Yazar VARCHAR(255) NOT NULL,
+    BasimYili INT NOT NULL,
+    Kaynak VARCHAR(50) NOT NULL,
+    Yayinevi VARCHAR(100) NOT NULL
+) AUTO_INCREMENT = 10;
 
-insert into products(p_code,p_name,g_code,fiyat) values 
-('AS01', 'Asus 14" Notebook', 	'LT',450),('AS15', 'Asus 15" Notebook', 	'LT',650),
-('D151', 'Dell 15" Notebook',  	'LT',550),('DT01','Asus Desktop Computer',	'DT',480),
-('AP70', 'Asus Mobile phone ',  'MP',300),('DT02','Asus Desktop Computer',	'DT',460),
-('AP20', 'Asus MMobile Phone',	'MP',290),('DT03','HP Desktop Computer',	'DT',440),
-('HP05', 'HP 17" Notebook',    	'LT',600),('DT04','Dell Desktop Computer',	'DT',390),
-('AS05', 'Asus 15" Notebook',  	'LT',570),('DT05','Dell Desktop Computer',	'DT',395),
-('BL13', 'Brother Lazer Printr','PR',120),('DT06','Zenon Desktop Computer',	'DT',475),
-('IJ10', 'HP InkJet Printer',  	'PR', 70),('DT07','Dell Desktop Computer',	'DT',495),
-('LZ30', 'HP Lazer Printer',   	'PR', 99),('DT08','HP Desktop Computer',	'DT',500);
+INSERT INTO KITAPLAR (KitapAdi, Yazar, BasimYili, Kaynak, Yayinevi)
+VALUES
+    ('Fareler ve İnsanlar', 'John Steinback', 2015, 'Yabancı', 'Damla'),
+    ('1984', 'George Orwell', 2019, 'Yabancı', 'Uğurböceği'),
+    ('Hayvan Çiftliği', 'George Orwell', 2019, 'Yabancı', 'Uğurböceği'),
+    ('Cengiz Hana Küsen Bulut', 'Cengiz Aytmatov', 2014, 'Türk', 'Piramit'),
+    ('Suç ve Ceza', 'Dostoyevski', 2011, 'Yabancı', 'Nobel'),
+    ('Sefiller', 'Viktor Hugo', 2010, 'Yabancı', 'Nobel'),
+    ('Sinekli Bakkal', 'Halide Edip Adıvar', 2001, 'Türk', 'Zirve'),
+    ('Çalıkuşu', 'Reşat Nuri Güntekin', 2000, 'Türk', 'Zirve'),
+    ('Yaprak Dökümü', 'Reşat Nuri Güntekin', 1998, 'Türk', 'Damla'),
+    ('Şah ve Sultan', 'İskender Pala', 2014, 'Türk', 'Kapı'),
+    ('Abum Rabum', 'İskender Pala', 2019, 'Türk', 'Kapı'),
+    ('Od', 'İskender Pala', 2015, 'Türk', 'Kapı'),
+    ('Mihmandar', 'İskender Pala', 2020, 'Türk', 'Kapı'),
+    ('İki Şehrin Hikayesi', 'Charles Dickens', 2005, 'Yabancı', 'Nobel');
+    
+UPDATE KITAPLAR SET Kaynak = 'Yabanci' WHERE Kaynak = 'Yabancı';
 
--- task01 -> products table a marka column ekleyiniz
-alter table products add marka varchar(20);
+CREATE TABLE DOKUM (
+    Kitap_ID INT,
+    Ogrenci_No CHAR(4),
+    Alim_Tarihi DATE,
+    Teslim_Tarihi DATE,
+    Onay INT,
+    FOREIGN KEY (Kitap_ID) REFERENCES KITAPLAR(Kitap_ID),
+    FOREIGN KEY (Ogrenci_No) REFERENCES OGRENCILER(Ogrenci_No)
+);
 
--- task02 -> product_group , g_name  i, varchar(20) olarak update edin
+INSERT INTO DOKUM (Kitap_ID, Ogrenci_No, Alim_Tarihi, Teslim_Tarihi, Onay)
+VALUES
+    (12, '562', '2021-02-12', '2021-02-28', 1),
+    (12, '965', '2021-03-15', '2021-03-31', 0),
+    (18, '741', '2021-03-31', '2021-04-15', 0),
+    (20, '523', '2021-03-31', '2021-04-15', 1),
+    (23, '965', '2021-04-28', '2021-05-13', 0);
+   select * from dokum;
+   select * from KITAPLAR;
+   select * from OGRENCILER;
+    
+-- Tüm öğrencilerin listesini getiren sorguyu yazınız
+  select * from OGRENCILER;
+    
 
-alter table product_group modify column g_name varchar(20);
+-- Tüm kitapların listesini getiren sorguyu yazınız	
+  select * from KITAPLAR;
 
--- task03 -> pruducts table renk column silin
-alter table products drop column g_renk;
+-- George Orwell a ait kitapları listeleyen sorguyu yazınız
+   select *
+   from kitaplar
+   where yazar='George Orwell';
+   
+-- İskender Pala ya ait kitapları listeleyen sorguyu yazınız		
+    select *
+   from kitaplar
+   where yazar='İskender Pala';     
+      
+-- Kaynağı Yabancı olan kitapları listeleyiniz
+   select *
+   from kitaplar
+   where kaynak='yabanci';             
+         
+-- Mart ayında alınan kitapları listeleyiniz
+            select * 
+            from kitaplar
+            -- where kitap_id in (select kitap_id from dokum where Alim_tarihi>='2021-03-1' and  Alim_tarihi<='2021-03-31');
+            where kitap_id in (select kitap_id from dokum where MONTH(Alim_tarihi)=3);
+            
+select *
+            from kitaplar
+            join dokum
+            on dokum.kitap_id = kitaplar.kitap_id
+            where month(alim_tarihi)=3;
+            SELECT YEAR('2021-02-28') AS yil;
 
--- task04 -> product_group , g_name i group_name olarak değiştirin.
-Alter table product_group rename column g_name to group_name;
 
--- task05 -> product_group , group_name i g_name varchar(15) olarak değiştirin.
 
-alter table product_group change group_name g_name varchar(15);
 
--- task06 -> kaç adet masaüstü(DT) ve  Laptop (LT) bilgisayar vardır listeleyen query create ediniz.
-select count(p_code) from products where g_code='DT' or g_code='LT';
-select COUNT(p_code) from products where g_code in ( 'DT', 'LT');
 
--- task07 -> Laptoplaın fiyatları toplamı listeleyen query create ediniz.
-select sum(fiyat) from products where g_code = "LT";
-
--- task08 ->) Printer ortalama fiyatı listeleyen query create ediniz.
-select avg(fiyat) from products where g_code = "PR";
-
--- task09 -> En ucuz ürünü listeleyen query create ediniz.
-select min(fiyat) from products where g_code='DT';
-select * from products where fiyat = (select min(fiyat) from products);
-
--- task10 ->  En ucuz DeskTop  listeleyen query create ediniz.
-select * from products where fiyat = (select min(fiyat) from products where g_code='DT');
-
--- task11 -> Her ürün grubundan kaç adet ürün vardır listeleyen query create ediniz..
-select g_code, count(*) from products group by g_code;
-
--- task12 -> Her bir ürün grubundaki en ucuz ürünleri listeleyen query create ediniz.
-select g_code, min(fiyat) from products group by g_code;
-
--- task13 -> ustteki soru g_name ile yapın 
-
-select g_code as KOD, ( select g_name from product_group 
-where product_group.g_code=products.g_code) as Gurup,  
-min(fiyat) as En_ucuz from products group by g_code;
-
--- task14 -> (11 soru) Her ürün grubundan kaç adet ürün vardır listeleyen query create ediniz.(g name ile)
-
-select g_code, ( select g_name from product_group 
-where product_group.g_code=products.g_code) as Gurup, count(*) from products group by g_code;
-
--- task15 ->) Her ürün grubundan kaç adet ürün vardır ve ortalma fiyatları nedir listeleyen query create ediniz.
-
-select g_code,( select g_name from product_group 
-where product_group.g_code=products.g_code) as Gurup, count(g_code) , avg(fiyat) from products group by g_code;
+SELECT MONTH('2021-02-28') AS ay;
+SELECT DAY('2021-02-28') AS gun;
+            
+-- Teslim edilmeyen kitapları ve kimde olduklarını listeleyiniz
+               
+               
+-- Kaynağı yabancı olan kaç kitap vardir
+                
+                
+-- Adının ilk harfi S olan kitapları listeleyin 
