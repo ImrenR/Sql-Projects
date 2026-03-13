@@ -1,76 +1,117 @@
+
 USE javacan;
 
--- Create departments table
-CREATE TABLE departments (
-    department_id CHAR(10) PRIMARY KEY,
-    department_name VARCHAR(14),
-    location VARCHAR(13)
-    -- CONSTRAINT department_pk PRIMARY KEY(department_id)
+-- Create worker table
+-- Columns: worker_id, worker_name, worker_salary
+-- Primary key: worker_id (named worker_id_pk)
+CREATE TABLE worker 
+(
+    worker_id CHAR(3),
+    worker_name VARCHAR(50),
+    worker_salary INT NOT NULL,
+    CONSTRAINT worker_id_pk PRIMARY KEY (worker_id)
 );
 
--- Insert sample departments
-INSERT INTO departments VALUES ('10','ACCOUNTING','IST');
-INSERT INTO departments VALUES ('20','MANAGEMENT','ANKARA');
-INSERT INTO departments VALUES ('30','SALES','IZMIR');
-INSERT INTO departments VALUES ('40','BUSINESS','BURSA');
-INSERT INTO departments VALUES ('50','WAREHOUSE','YOZGAT');
+-- Insert 4 sample workers
+INSERT INTO worker VALUES ('100','Oli Can', 12000);
+INSERT INTO worker VALUES ('102','Veli Han', 2000);
+INSERT INTO worker VALUES ('103','Ayse Kan', 7000);
+INSERT INTO worker VALUES ('104','Angie Ocean', 8500);
 
--- Create personnel table
-CREATE TABLE personnel (
-    personnel_id INT(4),
-    personnel_name VARCHAR(10),
-    job_title VARCHAR(9),
-    manager_id INT(4),
-    start_date DATE,
-    salary INT(7.2),
-    department_id INT(2),
-    CONSTRAINT personnel_pk PRIMARY KEY(personnel_id)
+-- View the table
+SELECT * FROM worker;
+
+-- -----------------------------------------------------------------------------
+-- Task01 -> Update the worker whose salary is 12000:
+--            change name to 'Ali Can' and id to '101'
+-- -----------------------------------------------------------------------------
+UPDATE worker
+SET worker_name = 'Ali Can', worker_id = '101'
+WHERE worker_salary = 12000;
+
+SELECT * FROM worker;
+
+-- -----------------------------------------------------------------------------
+-- Task02 -> Increase Veli Han's salary to 20% less than the highest salary
+-- -----------------------------------------------------------------------------
+UPDATE worker
+SET worker_salary = (
+    (SELECT MAX(worker_salary) FROM (SELECT * FROM worker) AS w) * 0.8
+)
+WHERE worker_name = 'Veli Han';
+
+-- -----------------------------------------------------------------------------
+-- Task03 -> Decrease Ali Can's salary to 30% more than the lowest salary
+-- -----------------------------------------------------------------------------
+UPDATE worker
+SET worker_salary = (
+    (SELECT MIN(worker_salary) FROM (SELECT * FROM worker) AS a) * 1.3
+)
+WHERE worker_name = 'Ali Can';
+
+-- -----------------------------------------------------------------------------
+-- Task04 -> If a worker's salary is below the average, increase salary by 1000
+-- -----------------------------------------------------------------------------
+UPDATE worker
+SET worker_salary = worker_salary + 1000
+WHERE worker_salary < (
+    SELECT AVG(worker_salary) FROM (SELECT worker_salary FROM worker) AS B
 );
 
--- Insert sample personnel data
-INSERT INTO personnel VALUES (7369,'AHMET','CLERK',7902,'1980-12-17',800,20);
-INSERT INTO personnel VALUES (7499,'BAHATTIN','SALES',7698,'1981-02-02',1600,30);
-INSERT INTO personnel VALUES (7521,'NESE','SALES',7698,'1981-02-22',1250,30);
-INSERT INTO personnel VALUES (7566,'MUZAFFER','MANAGER',7839,'1981-02-04',2975,20);
-INSERT INTO personnel VALUES (7654,'MUHAMMET','SALES',7698,'1981-09-09',1250,30);
-INSERT INTO personnel VALUES (7698,'EMINE','MANAGER',7839,'1981-01-05',2850,30);
-INSERT INTO personnel VALUES (7782,'HARUN','MANAGER',7839,'1981-09-06',2450,10);
-INSERT INTO personnel VALUES (7788,'MESUT','ANALYST',7566,'1987-12-07',3000,20);
-INSERT INTO personnel VALUES (7839,'SEHER','PRESIDENT',NULL,'1981-11-17',5000,10);
-INSERT INTO personnel VALUES (7844,'DUYGU','SALES',7698,'1981-08-09',1500,30);
-INSERT INTO personnel VALUES (7876,'ALI','CLERK',7788,'1987-07-13',1100,20);
-INSERT INTO personnel VALUES (7900,'MERVE','CLERK',7698,'1981-03-12',950,30);
-INSERT INTO personnel VALUES (7902,'NAZLI','ANALYST',7566,'1981-03-12',3000,20);
-INSERT INTO personnel VALUES (7934,'EBRU','CLERK',7782,'1982-01-23',1300,10);
-INSERT INTO personnel VALUES (7956,'SIBEL','ARCHITECT',7782,'1991-01-29',3300,60);
-INSERT INTO personnel VALUES (7933,'ZEKI','ENGINEER',7782,'1987-01-26',4300,60);
-
--- View data
-SELECT * FROM personnel;
-SELECT * FROM departments;
+SELECT * FROM worker;
 
 -- -----------------------------------------------------------------------------
--- Task01 -> List names and departments of personnel working in SALES and ACCOUNTING
---           Sorted first by department, then by personnel name
+-- Task05 -> If a worker's salary is below average, raise it to the average salary
 -- -----------------------------------------------------------------------------
-SELECT d.department_name,
-       p.personnel_name
-FROM departments d
-JOIN personnel p
-    ON d.department_id = p.department_id
-WHERE d.department_name IN ('SALES','ACCOUNTING')  -- only these departments
-ORDER BY d.department_name, p.personnel_name;       -- first by department, then by name
+UPDATE worker
+SET worker_salary = (
+    SELECT AVG(worker_salary) FROM (SELECT worker_salary FROM worker) AS avg_salary
+)
+WHERE worker_salary < (
+    SELECT AVG(worker_salary) FROM (SELECT worker_salary FROM worker) AS avg_salary
+);
 
 -- -----------------------------------------------------------------------------
--- Task02 -> List names, departments, and start dates of personnel working in
---           SALES, BUSINESS, and WAREHOUSE. Sorted by personnel name.
---           Note: Even if no personnel exists in a department, the department name should be shown
+-- Create people table
+-- Columns: ssn, name, address
 -- -----------------------------------------------------------------------------
-SELECT p.personnel_name,
-       d.department_name,
-       p.start_date
-FROM departments d
-JOIN personnel p
-    ON d.department_id = p.department_id
-WHERE d.department_name IN ('SALES','BUSINESS','WAREHOUSE')
-ORDER BY p.personnel_name;
+CREATE TABLE people 
+(
+    ssn CHAR(9),
+    name VARCHAR(50),
+    address VARCHAR(80)
+);
+
+-- Insert sample data
+INSERT INTO people VALUES (123456789, 'Mark Star', 'Florida');
+INSERT INTO people VALUES (234567890, 'Angie Way', 'Virginia');
+INSERT INTO people VALUES (345678901, 'Marry Tien', 'New Jersey');
+INSERT INTO people (ssn, address) VALUES (456789012, 'Michigan');   -- name is NULL
+INSERT INTO people (ssn, address) VALUES (567890123, 'California'); -- name is NULL
+INSERT INTO people (ssn, name) VALUES (567890123, 'California');    -- address is NULL
+
+SELECT * FROM people;
+
+-- -----------------------------------------------------------------------------
+-- Task06 -> Replace NULL names with 'name will be added later'
+-- -----------------------------------------------------------------------------
+UPDATE people
+SET name = 'name will be added later'
+WHERE name IS NULL;
+
+-- -----------------------------------------------------------------------------
+-- Task07 -> Replace NULL addresses with 'address will be added later'
+-- -----------------------------------------------------------------------------
+UPDATE people
+SET address = 'address will be added later'
+WHERE address IS NULL;
+
+-- -----------------------------------------------------------------------------
+-- Task08 -> Replace all NULL values in people table with 'to be inserted later'
+--            Using COALESCE
+-- -----------------------------------------------------------------------------
+UPDATE people
+SET name = COALESCE(name, 'to be inserted later'),
+    address = COALESCE(address, 'to be inserted later');
+
+SELECT * FROM people;

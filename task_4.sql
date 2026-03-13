@@ -1,61 +1,76 @@
-USE sakila;
-select * from sakila.city;
-select * from city;
+USE javacan;
 
--- Task01-> City'deki her şeyi göster. Ancak sıralama country_id ' ye göre olsun ve baştan sona dogru sıralansın.
+-- Create departments table
+CREATE TABLE departments (
+    department_id CHAR(10) PRIMARY KEY,
+    department_name VARCHAR(14),
+    location VARCHAR(13)
+    -- CONSTRAINT department_pk PRIMARY KEY(department_id)
+);
 
+-- Insert sample departments
+INSERT INTO departments VALUES ('10','ACCOUNTING','IST');
+INSERT INTO departments VALUES ('20','MANAGEMENT','ANKARA');
+INSERT INTO departments VALUES ('30','SALES','IZMIR');
+INSERT INTO departments VALUES ('40','BUSINESS','BURSA');
+INSERT INTO departments VALUES ('50','WAREHOUSE','YOZGAT');
 
--- Task02-> City'deki her şeyi göster. Ancak sıralama city_id ' ye göre olsun ve sondan başa dogru sıralansın.
+-- Create personnel table
+CREATE TABLE personnel (
+    personnel_id INT(4),
+    personnel_name VARCHAR(10),
+    job_title VARCHAR(9),
+    manager_id INT(4),
+    start_date DATE,
+    salary INT(7.2),
+    department_id INT(2),
+    CONSTRAINT personnel_pk PRIMARY KEY(personnel_id)
+);
 
+-- Insert sample personnel data
+INSERT INTO personnel VALUES (7369,'AHMET','CLERK',7902,'1980-12-17',800,20);
+INSERT INTO personnel VALUES (7499,'BAHATTIN','SALES',7698,'1981-02-02',1600,30);
+INSERT INTO personnel VALUES (7521,'NESE','SALES',7698,'1981-02-22',1250,30);
+INSERT INTO personnel VALUES (7566,'MUZAFFER','MANAGER',7839,'1981-02-04',2975,20);
+INSERT INTO personnel VALUES (7654,'MUHAMMET','SALES',7698,'1981-09-09',1250,30);
+INSERT INTO personnel VALUES (7698,'EMINE','MANAGER',7839,'1981-01-05',2850,30);
+INSERT INTO personnel VALUES (7782,'HARUN','MANAGER',7839,'1981-09-06',2450,10);
+INSERT INTO personnel VALUES (7788,'MESUT','ANALYST',7566,'1987-12-07',3000,20);
+INSERT INTO personnel VALUES (7839,'SEHER','PRESIDENT',NULL,'1981-11-17',5000,10);
+INSERT INTO personnel VALUES (7844,'DUYGU','SALES',7698,'1981-08-09',1500,30);
+INSERT INTO personnel VALUES (7876,'ALI','CLERK',7788,'1987-07-13',1100,20);
+INSERT INTO personnel VALUES (7900,'MERVE','CLERK',7698,'1981-03-12',950,30);
+INSERT INTO personnel VALUES (7902,'NAZLI','ANALYST',7566,'1981-03-12',3000,20);
+INSERT INTO personnel VALUES (7934,'EBRU','CLERK',7782,'1982-01-23',1300,10);
+INSERT INTO personnel VALUES (7956,'SIBEL','ARCHITECT',7782,'1991-01-29',3300,60);
+INSERT INTO personnel VALUES (7933,'ZEKI','ENGINEER',7782,'1987-01-26',4300,60);
 
--- Task03-> City'deki her şeyi göster. Ancak sıralama city ' ye göre olsun ve sondan başa dogru sıralansın.
+-- View data
+SELECT * FROM personnel;
+SELECT * FROM departments;
 
+-- -----------------------------------------------------------------------------
+-- Task01 -> List names and departments of personnel working in SALES and ACCOUNTING
+--           Sorted first by department, then by personnel name
+-- -----------------------------------------------------------------------------
+SELECT d.department_name,
+       p.personnel_name
+FROM departments d
+JOIN personnel p
+    ON d.department_id = p.department_id
+WHERE d.department_name IN ('SALES','ACCOUNTING')  -- only these departments
+ORDER BY d.department_name, p.personnel_name;       -- first by department, then by name
 
--- Task04-> City’lerin arasından A harfi ile başlayanları, city id lerine göre tersten yazdır. 
-
-
--- Task05->  city_id  , city , country_ id yi yazdırın. Koşul olarak country_id si 50 den büyük olanları yazdırın.country id ile tersten sıralayın.
-
-
--- Task06->  city_id  , city , country_ id yi yazdırın. Koşul olarak country id si 20 ile 25 arasında olanları yazdır ve country id ye göre yazdır.
-
-SELECT * FROM employees;
-
--- Task07-> Bir Job_id içerisinde kaç kişi çalışıyor? Job id grubu oluşturarak yazalım.
-select JOB_ID,count(first_name) as calisan from employees
-group by JOB_ID;
-
-
--- Task08-> Yukarıdaki örneğe ek olarak, ismi T harfi ile biten job_id leri yazdırmasını isteyelim.
-select JOB_ID,count(first_name) as calisan from employees
--- where  JOB_ID like '%T'
-
-group by JOB_ID
-having JOB_ID like '%T';
-
-
-
--- Task09-> job_ id lere göre her job id nin toplam maaşını görüntüle. 
--- Maaşların yazacağı kısmı ‘Total’ olarak nitelendir. Job id olarak gruplandır. 
- select JOB_ID,sum(salary) as Total from employees
-group by JOB_ID;
-
--- Task10->  Bir manager_İd den kac adet oldugunu bul. Kaç kez kullanılmış ?Gruplandırma olarak ta manager id kullan.
-select manager_id,count(manager_id) as manager from employees
-group by manager_id;
-
--- Task11->   Bir 100'den fazla olan  manager_id den kaç adet oldugunu bul. manager_id olarak grupla. 
-
-select manager_id,count(manager_id) as manager from employees
-where manager_id>150
-group by manager_id;
-
-
--- Task12-> first_name ve salary'lerin toplamını yazdırın.
--- 2000 den büyük salary leri first_name ' e göre gruplandırın ve bu grupları first_name'in baş harfi D olanlar ile yapın.
-
-select first_name, sum(salary) as total_salary
-from employees
-where salary>2000
-group by first_name
-having first_name like 'D%';
+-- -----------------------------------------------------------------------------
+-- Task02 -> List names, departments, and start dates of personnel working in
+--           SALES, BUSINESS, and WAREHOUSE. Sorted by personnel name.
+--           Note: Even if no personnel exists in a department, the department name should be shown
+-- -----------------------------------------------------------------------------
+SELECT p.personnel_name,
+       d.department_name,
+       p.start_date
+FROM departments d
+JOIN personnel p
+    ON d.department_id = p.department_id
+WHERE d.department_name IN ('SALES','BUSINESS','WAREHOUSE')
+ORDER BY p.personnel_name;

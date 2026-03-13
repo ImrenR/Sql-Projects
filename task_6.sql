@@ -1,117 +1,123 @@
-
 USE javacan;
 
--- Create worker table
--- Columns: worker_id, worker_name, worker_salary
--- Primary key: worker_id (named worker_id_pk)
-CREATE TABLE worker 
+-- Create table for books
+CREATE TABLE books
 (
-    worker_id CHAR(3),
-    worker_name VARCHAR(50),
-    worker_salary INT NOT NULL,
-    CONSTRAINT worker_id_pk PRIMARY KEY (worker_id)
+    idno INT PRIMARY KEY,
+    authorno INT NOT NULL,
+    type_no INT NOT NULL,
+    page_count INT NOT NULL DEFAULT 0
 );
 
--- Insert 4 sample workers
-INSERT INTO worker VALUES ('100','Oli Can', 12000);
-INSERT INTO worker VALUES ('102','Veli Han', 2000);
-INSERT INTO worker VALUES ('103','Ayse Kan', 7000);
-INSERT INTO worker VALUES ('104','Angie Ocean', 8500);
+-- Insert sample book records
+INSERT INTO books VALUES (1,26,3,368);
+INSERT INTO books VALUES (2,6,1,220);
+INSERT INTO books VALUES (3,18,6,311);
+INSERT INTO books VALUES (4,22,4,135);
+INSERT INTO books VALUES (5,10,3,179);
+INSERT INTO books VALUES (6,25,1,242);
+INSERT INTO books VALUES (7,22,3,346);
+INSERT INTO books VALUES (8,28,6,389);
+INSERT INTO books VALUES (9,6,4,259);
+INSERT INTO books VALUES (10,27,2,391);
+INSERT INTO books VALUES (11,19,6,89);
+INSERT INTO books VALUES (12,6,4,265);
+INSERT INTO books VALUES (13,20,6,160);
+INSERT INTO books VALUES (14,27,5,383);
+INSERT INTO books VALUES (15,5,6,188);
 
--- View the table
-SELECT * FROM worker;
-
--- -----------------------------------------------------------------------------
--- Task01 -> Update the worker whose salary is 12000:
---            change name to 'Ali Can' and id to '101'
--- -----------------------------------------------------------------------------
-UPDATE worker
-SET worker_name = 'Ali Can', worker_id = '101'
-WHERE worker_salary = 12000;
-
-SELECT * FROM worker;
-
--- -----------------------------------------------------------------------------
--- Task02 -> Increase Veli Han's salary to 20% less than the highest salary
--- -----------------------------------------------------------------------------
-UPDATE worker
-SET worker_salary = (
-    (SELECT MAX(worker_salary) FROM (SELECT * FROM worker) AS w) * 0.8
-)
-WHERE worker_name = 'Veli Han';
-
--- -----------------------------------------------------------------------------
--- Task03 -> Decrease Ali Can's salary to 30% more than the lowest salary
--- -----------------------------------------------------------------------------
-UPDATE worker
-SET worker_salary = (
-    (SELECT MIN(worker_salary) FROM (SELECT * FROM worker) AS a) * 1.3
-)
-WHERE worker_name = 'Ali Can';
-
--- -----------------------------------------------------------------------------
--- Task04 -> If a worker's salary is below the average, increase salary by 1000
--- -----------------------------------------------------------------------------
-UPDATE worker
-SET worker_salary = worker_salary + 1000
-WHERE worker_salary < (
-    SELECT AVG(worker_salary) FROM (SELECT worker_salary FROM worker) AS B
-);
-
-SELECT * FROM worker;
-
--- -----------------------------------------------------------------------------
--- Task05 -> If a worker's salary is below average, raise it to the average salary
--- -----------------------------------------------------------------------------
-UPDATE worker
-SET worker_salary = (
-    SELECT AVG(worker_salary) FROM (SELECT worker_salary FROM worker) AS avg_salary
-)
-WHERE worker_salary < (
-    SELECT AVG(worker_salary) FROM (SELECT worker_salary FROM worker) AS avg_salary
-);
-
--- -----------------------------------------------------------------------------
--- Create people table
--- Columns: ssn, name, address
--- -----------------------------------------------------------------------------
-CREATE TABLE people 
+-- Create table for book types
+CREATE TABLE book_types
 (
-    ssn CHAR(9),
-    name VARCHAR(50),
-    address VARCHAR(80)
+    type_no INT PRIMARY KEY,
+    type_name VARCHAR(10) NOT NULL
 );
 
--- Insert sample data
-INSERT INTO people VALUES (123456789, 'Mark Star', 'Florida');
-INSERT INTO people VALUES (234567890, 'Angie Way', 'Virginia');
-INSERT INTO people VALUES (345678901, 'Marry Tien', 'New Jersey');
-INSERT INTO people (ssn, address) VALUES (456789012, 'Michigan');   -- name is NULL
-INSERT INTO people (ssn, address) VALUES (567890123, 'California'); -- name is NULL
-INSERT INTO people (ssn, name) VALUES (567890123, 'California');    -- address is NULL
+-- Insert sample book types
+INSERT INTO book_types VALUES (1,'Drama');
+INSERT INTO book_types VALUES (2,'Comedy');
+INSERT INTO book_types VALUES (3,'Novel');
+INSERT INTO book_types VALUES (4,'Story');
+INSERT INTO book_types VALUES (5,'Research');
+INSERT INTO book_types VALUES (6,'Fable');
+INSERT INTO book_types VALUES (7,'Essay');
 
-SELECT * FROM people;
+-- Create table for students
+CREATE TABLE students
+(
+    student_no INT PRIMARY KEY,
+    first_name VARCHAR(10) NOT NULL,
+    last_name VARCHAR(10) NOT NULL,
+    gender VARCHAR(1) NOT NULL,
+    class VARCHAR(3) DEFAULT ''
+);
 
--- -----------------------------------------------------------------------------
--- Task06 -> Replace NULL names with 'name will be added later'
--- -----------------------------------------------------------------------------
-UPDATE people
-SET name = 'name will be added later'
-WHERE name IS NULL;
+-- Insert sample students
+INSERT INTO students VALUES (1,'ahmet','cansever','m','10a');
+INSERT INTO students VALUES (2,'niyazi','sevinc','m','11b');
+INSERT INTO students VALUES (3,'ismail','sevinc','m','10b');
+INSERT INTO students VALUES (4,'kenan','emin','m','9a');
+INSERT INTO students VALUES (5,'sema','bakir','f','9b');
+INSERT INTO students VALUES (6,'beyda','kara','f','9c');
+INSERT INTO students VALUES (7,'betül','coskun','f','11a');
+INSERT INTO students VALUES (8,'sema','rüzgar','f','9c');
+INSERT INTO students VALUES (9,'fadime','dönmez','f','9a');
+INSERT INTO students VALUES (10,'riza','koc','m','10b');
+INSERT INTO students VALUES (11,'beyza','kabak','f','10b');
+INSERT INTO students VALUES (12,'deniz','akcakaya','m','11a');
+INSERT INTO students VALUES (13,'kemal','karapinar','m','11a');
+INSERT INTO students VALUES (14,'derya','yilbur','f','10c');
+INSERT INTO students VALUES (15,'filiz','akat','f','10a');
+INSERT INTO students VALUES (16,'niyazi','dönmez','m','11a');
+INSERT INTO students VALUES (17,'sema','sekmen','f','10b');
 
--- -----------------------------------------------------------------------------
--- Task07 -> Replace NULL addresses with 'address will be added later'
--- -----------------------------------------------------------------------------
-UPDATE people
-SET address = 'address will be added later'
-WHERE address IS NULL;
+-- Select all tables to see the data
+SELECT * FROM students;
+SELECT * FROM books;
+SELECT * FROM book_types;
 
--- -----------------------------------------------------------------------------
--- Task08 -> Replace all NULL values in people table with 'to be inserted later'
---            Using COALESCE
--- -----------------------------------------------------------------------------
-UPDATE people
-SET name = COALESCE(name, 'to be inserted later'),
-    address = COALESCE(address, 'to be inserted later');
+-- Task01 -> Count how many students exist for each first name
+SELECT first_name AS first_name,
+       COUNT(*) AS count_of_students
+FROM students
+GROUP BY first_name
+ORDER BY first_name;
 
-SELECT * FROM people;
+-- Task02 -> Count how many students are in each class
+SELECT class,
+       COUNT(*) AS count_of_students
+FROM students
+GROUP BY class;
+
+-- Task03 -> Count male and female students in each class
+SELECT class AS class,
+       gender AS gender,
+       COUNT(*) AS count_students
+FROM students
+GROUP BY class, gender
+ORDER BY class, gender;
+
+-- Task05 -> List the books with the highest page count per type (currently just orders all)
+SELECT bt.type_name,
+       b.page_count
+FROM books b
+JOIN book_types bt
+  ON b.type_no = bt.type_no
+ORDER BY page_count DESC;
+
+-- Task06 -> List the books with the lowest page count per type (currently just orders all)
+SELECT bt.type_name,
+       b.page_count
+FROM books b
+JOIN book_types bt
+  ON b.type_no = bt.type_no
+ORDER BY page_count ASC;
+
+-- Task07 -> Count how many books exist for each type
+SELECT bt.type_name,
+       COUNT(*) AS book_count
+FROM books b
+JOIN book_types bt
+  ON b.type_no = bt.type_no
+GROUP BY bt.type_name
+ORDER BY bt.type_name;
