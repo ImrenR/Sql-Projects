@@ -304,3 +304,5 @@ select ad from yazar where ad not like '%a%';
 select ad from kitap where ad like '______';
 -- Task13 -> 1. harfi A ve 8. harfi A olan kitaplari listeleyen query create ediniz.
 select ad from kitap where ad like 'a______a%';
+
+
