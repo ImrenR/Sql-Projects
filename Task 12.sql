@@ -351,7 +351,9 @@ ON o.bolum = b.bolum AND o.puan = b.max_puan;
 
 -- List students in Mathematics or Computer Engineering departments.
 
-
+select isim, bolum
+from ogrenciler
+where bolum='Matematik' or bolum='Bilgisayar';
 
 
 
