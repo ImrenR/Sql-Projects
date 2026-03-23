@@ -344,7 +344,26 @@ where b.taban_puanı>450;
 
 
 -- List the average salary and number of developers in each country.
+
+
+
 -- List students in departments located in the “North” campus.
+
+
+
+
+
+
+
 -- List students with a score greater than 500 in the “South” campus.
+
+
+
+
 -- List each developer’s programming language and country code.
+
+
+
+
+
 -- List developers whose salary is between 45000 and 60000 along with their programming language and country name.
