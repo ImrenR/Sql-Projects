@@ -389,7 +389,11 @@ ON o.bolum = b.bolum;
 -- List students in departments located in the “North” campus.
 
 
-
+select o.isim
+from ogrenciler o
+join bolumler b
+on o.bolum=b.bolum
+where b.kampus='Kuzey';
 
 
 
