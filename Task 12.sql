@@ -406,8 +406,20 @@ where o.puan>500 and b.kampus='Güney';
 
 -- List each developer’s programming language and country code.
 
-
+select c.country_code,d.name,
+d.prog_lang
+from developers d
+join countries c
+on d.id=c.id;
 
 
 
 -- List developers whose salary is between 45000 and 60000 along with their programming language and country name.
+
+select d.name,
+d.prog_lang,
+c.country_name
+from developers d
+join countries c
+on d.id=c.id
+where d.salary between 45000 and 60000;
