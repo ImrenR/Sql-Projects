@@ -327,7 +327,13 @@ order by salary desc;
 -- Count how many developers work in each country.
 
 
-
+select
+c.country_name,
+count(d.id) as developer_adedi
+from countries c
+join developers d
+on c.id=d.id
+group by c.country_name;
 
 -- List the developer with the highest salary and their country.
 
