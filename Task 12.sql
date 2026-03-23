@@ -312,7 +312,9 @@ on d.id=c.id;
 
 -- List developers whose salary is above the average.
 
-
+select id, name
+from developers
+where salary > (select avg(salary) from developers)
 
 
 -- List developers who know Java and JavaScript, ordered by salary descending.
