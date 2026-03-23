@@ -278,7 +278,10 @@ where b.taban_puanı>450;
 
 -- List the names of students in Istanbul along with their department.
 
-
+select bolum,
+round(avg(puan),0) as ort_puan
+from ogrenciler
+group by bolum;
 
 
 
