@@ -338,7 +338,14 @@ group by c.country_name;
 
 -- List the student with the highest score in each department.
 
-
+SELECT o.isim, o.bolum, o.puan
+FROM ogrenciler o
+JOIN (
+    SELECT bolum, MAX(puan) AS max_puan
+    FROM ogrenciler
+    GROUP BY bolum
+) b
+ON o.bolum = b.bolum AND o.puan = b.max_puan;
 
 
 
