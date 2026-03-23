@@ -374,7 +374,13 @@ where salary > 50000 and prog_lang='Java';
 
 -- List the difference between students’ scores and their department’s base score.
 
-
+SELECT 
+    o.isim AS student_name,
+    o.bolum AS department,
+    o.puan - b.taban_puanı AS score_difference
+FROM ogrenciler o
+JOIN bolumler b
+ON o.bolum = b.bolum;
 
 -- List the average salary and number of developers in each country.
 
