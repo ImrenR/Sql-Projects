@@ -216,6 +216,13 @@ where sehir='istanbul' and puan>500;
 
 -- List the number of students in each department along with the department's base score.
 
+select o.bolum,count(o.isim) as ogrenci_sayisi,b.taban_puanı
+from ogrenciler o
+join bolumler b
+on o.bolum=b.bolum
+group by o.bolum,
+b.taban_puanı;
+
 -- Using JOIN, list students' scores and their department information from the departments table.
 
 -- List the names of students with scores greater than 500 in uppercase.
