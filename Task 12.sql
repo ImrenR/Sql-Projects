@@ -113,23 +113,153 @@ select * from developers;
 select * from ogrenciler;
 select * from bolumler;
 
--- Tüm ülkeleri alfabetik sıraya göre listeleyin.
--- Telefon kodu 50’den büyük olan ülkeleri ve isimlerini listeleyin.
--- Maaşı 50000’den büyük olan tüm geliştiricileri ve programlama dillerini listeleyin.
--- Java programlama dilini kullanan geliştiricilerin maaş ortalamasını bulun.
--- Maaşı 45000 ile 60000 arasında olan geliştiricileri sıralayın.
--- Maaşı en düşük ve en yüksek olan geliştiriciyi tek sorguda listeleyin.
--- Her programlama dili için ortalama maaşı ve maksimum maaşı listeleyin.
--- HTML veya CSS bilen geliştiricileri listeleyin.
--- Maaşı 50000’den büyük olan geliştiricileri maaşa göre azalan sırayla listeleyin.
--- Öğrencilerin şehirlerine göre kaç kişi olduğunu listeleyin.
--- Bilgisayar Mühendisliği bölümünde okuyan öğrencilerin toplam puanını bulun.
--- Taban puanı 450’den yüksek olan bölümleri ve kampüslerini listeleyin.
--- Puanı 500’den yüksek olan öğrencileri puanlarına göre azalan şekilde sıralayın.
--- Öğrencilerin isimlerinin ilk harfi “S” olanları listeleyin.
--- İstanbul’da okuyan ve puanı 500’den yüksek olan öğrencileri listeleyin.
--- Her bölümde okuyan öğrenci sayısını ve bölümün taban puanını listeleyin.
--- Öğrencilerin puanlarını ve bölümlerini JOIN kullanarak bölüm tablosundan alın.
--- Puanı 500’den yüksek olan öğrencilerin adlarını büyük harfle listeleyin.
--- Taban puanı 450’den yüksek bölümler ve bu bölümlerdeki öğrencilerin isimlerini JOIN ile listeleyin.
--- Geliştirici maaşlarının ortalamasından yüksek maaş alan geliştiricileri programlama dillerine göre gruplayarak listeleyin.
+-- List all countries in alphabetical order.
+
+select * from countries
+order by country_name;
+
+-- List countries whose phone code is greater than 50.
+
+select phone_code,
+country_name
+from countries
+where phone_code > 50;
+
+-- List all developers whose salary is greater than 50000 along with their programming languages.
+
+select name,prog_lang
+from developers
+where salary > 50000;
+
+-- Find the average salary of developers who use Java.
+
+select prog_lang,
+avg(salary) as ort_maas
+from developers
+where prog_lang='java';
+
+-- List developers whose salary is between 45000 and 60000.
+
+select name,
+salary
+from developers
+where salary between 45000 and 60000;
+
+-- List the developers with the minimum and maximum salary in a single query.
+
+select name,salary
+from developers
+where salary = (select max(salary) from developers)
+or salary=(select min(salary) from developers);
+
+-- For each programming language, list the average salary and maximum salary.
+
+select prog_lang,
+avg(salary) as ort_maas,
+max(salary) as max_maas
+from developers
+group by prog_lang;
+
+-- List developers who know HTML or CSS.
+
+select name, prog_lang
+from developers
+where prog_lang = 'html' or prog_lang='css';
+
+-- List developers whose salary is greater than 50000 ordered by salary in descending order.
+
+select name,
+salary
+from developers
+where salary > 50000
+order by salary desc;
+
+-- List the number of students in each city.
+
+select sehir,
+count(isim) as kisi_sayisi
+from ogrenciler
+group by sehir;
+
+-- Find the total score of students studying in the Computer Engineering department.
+
+select bolum,
+sum(puan) as toplam_puan
+from ogrenciler
+group by bolum
+having bolum='bilgisayar muh.';
+
+-- List departments whose base score is greater than 450 along with their campuses.
+
+select bolum,kampus
+from bolumler
+where taban_puanı > 450;
+
+-- List students whose score is greater than 500 ordered by score in descending order.
+
+select isim
+from ogrenciler
+where puan>500
+order by puan desc;
+
+-- List students whose names start with the letter "S".
+
+select isim
+from ogrenciler
+where isim like 'S%';
+
+-- List students who study in Istanbul and have a score greater than 500.
+
+select isim
+from ogrenciler
+where sehir='istanbul' and puan>500;
+
+-- List the number of students in each department along with the department's base score.
+
+-- Using JOIN, list students' scores and their department information from the departments table.
+
+-- List the names of students with scores greater than 500 in uppercase.
+
+-- Using JOIN, list students who belong to departments with a base score greater than 450.
+
+-- List developers whose salary is higher than the average salary grouped by programming language.
+
+-- List each student's name, score, and their department’s campus.
+
+-- List students studying in departments with a base score greater than 450.
+
+-- List the names of students studying in Istanbul along with their department names.
+
+-- List the average score of students for each department.
+
+-- List students whose score is higher than their department’s base score.
+
+-- List developers along with their salary and country name.
+
+-- List developers whose salary is above the average salary.
+
+-- List developers who know Java or JavaScript ordered by salary in descending order.
+
+-- List how many developers are in each country.
+
+-- List the developer with the highest salary along with their country.
+
+-- List the student with the highest score in each department.
+
+-- List students who study in Mathematics or Computer Engineering departments.
+
+-- List students' names and departments in uppercase.
+
+-- List developers whose salary is greater than 50000 and who use Java.
+
+-- List the difference between students' scores and their department’s base score.
+
+-- List the average salary and number of developers in each country.
+
+-- List students studying in departments located in the "Kuzey" campus.
+
+-- List students whose score is greater than 500 and whose campus is "Güney".
+
+-- List each developer’s programming language and country code.
+
+-- List developers whose salary is between 45000 and 60000 along with their programming language and country name.
