@@ -247,9 +247,41 @@ on s.department=d.department
 where d.base_score>450;
 
 -- List developers whose salary is above the average, grouped by programming language.
+
+select prog_lang, count(*) as above_avg_count
+from developers
+where salary > (select avg(salary) from developers)
+group by prog_lang;
+
+
 -- List each student’s name, score, and the campus of their department.
+
+
+select o.isim,o.puan,
+b.kampus
+from ogrenciler o
+left join bolumler b
+on o.bolum=b.bolum;
+
+
+
+
 -- List students studying in departments with a base score greater than 450.
+
+select o.isim,b.bolum
+from ogrenciler o
+join bolumler b
+on o.bolum=b.bolum
+where b.taban_puanı>450;
+
+
+
 -- List the names of students in Istanbul along with their department.
+
+
+
+
+
 -- List the average score of students for each department.
 -- List students whose score is higher than their department’s base score.
 -- List developers along with their salary and country name.
