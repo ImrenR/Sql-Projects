@@ -1,4 +1,5 @@
 -- All countries
+use kutuphane;
 CREATE TABLE countries(
     id int NOT NULL,
     phone_code int NOT NULL,
@@ -77,48 +78,49 @@ INSERT INTO developers(name,salary,prog_lang) VALUES('Kerem',27000,'C++');
 INSERT INTO developers(name,salary,prog_lang) VALUES('Ayşe',34000,'C#');
 INSERT INTO developers(name,salary,prog_lang) VALUES('Zeki',44000,'C#');
 
-CREATE TABLE ogrenciler 
+CREATE TABLE students 
 (  
   id int, 
-  isim varchar(50), 
-  sehir varchar(50), 
-  puan int,
-  bolum varchar(20)
+  name varchar(50), 
+  city varchar(50), 
+  score int,
+  department varchar(20)
 );
 
-INSERT INTO ogrenciler VALUES(100, 'Ahmet Ümit', 'İstanbul', 546, 'Bilgisayar Müh.');
-INSERT INTO ogrenciler VALUES(101, 'R.Nuri Güntekin', 'Antalya', 486, 'İşletme');
-INSERT INTO ogrenciler VALUES(102, 'S.Faik Abasıyanık', 'Bursa', 554, 'Bilgisayar Müh.');
-INSERT INTO ogrenciler VALUES(103, 'Yaşar Kemal', 'İstanbul', 501, 'Matematik');
-INSERT INTO ogrenciler VALUES(104, 'Halide E. Adıvar', 'İzmir', 473, 'Psikoloji');
-INSERT INTO ogrenciler VALUES(105, 'Nazan Bekiroğlu', 'İzmir', 432, 'Edebiyat');
-INSERT INTO ogrenciler VALUES(106, 'Peyami Safa', 'Antalya', 535, 'Bilgisayar Müh.');
-INSERT INTO ogrenciler VALUES(107, 'Sabahattin Ali', 'İstanbul', 492, 'Matematik');
+INSERT INTO students VALUES(100, 'Ahmet Ümit', 'Istanbul', 546, 'Computer Engineering');
+INSERT INTO students VALUES(101, 'R.Nuri Güntekin', 'Antalya', 486, 'Business Administration');
+INSERT INTO students VALUES(102, 'S.Faik Abasıyanık', 'Bursa', 554, 'Computer Engineering');
+INSERT INTO students VALUES(103, 'Yaşar Kemal', 'Istanbul', 501, 'Mathematics');
+INSERT INTO students VALUES(104, 'Halide E. Adıvar', 'Izmir', 473, 'Psychology');
+INSERT INTO students VALUES(105, 'Nazan Bekiroğlu', 'Izmir', 432, 'Literature');
+INSERT INTO students VALUES(106, 'Peyami Safa', 'Antalya', 535, 'Computer Engineering');
+INSERT INTO students VALUES(107, 'Sabahattin Ali', 'Istanbul', 492, 'Mathematics');
 
-CREATE TABLE bolumler 
+CREATE TABLE departments 
 (  
-  bolum_id int, 
-  bolum varchar(20),
-  taban_puanı int,
-  kampus varchar(20)
+  department_id int, 
+  department varchar(20),
+  base_score int,
+  campus varchar(20)
 );
 
-INSERT INTO bolumler VALUES(5001, 'Bilgisayar Müh.', 521,'Kuzey');
-INSERT INTO bolumler VALUES(5002, 'Matematik', 455,'Güney');
-INSERT INTO bolumler VALUES(5003, 'Psikoloji', 440,'Hisar');
-INSERT INTO bolumler VALUES(5004, 'İşletme', 465,'Hisar');
-INSERT INTO bolumler VALUES(5005, 'Edebiyat', 420,'Kuzey');
+INSERT INTO departments VALUES(5001, 'Computer Engineering', 521,'North');
+INSERT INTO departments VALUES(5002, 'Mathematics', 455,'South');
+INSERT INTO departments VALUES(5003, 'Psychology', 440,'Hisar');
+INSERT INTO departments VALUES(5004, 'Business Administration', 465,'Hisar');
+INSERT INTO departments VALUES(5005, 'Literature', 420,'North');
+
 select * from countries;
 select * from developers;
-select * from ogrenciler;
-select * from bolumler;
+select * from students;
+select * from departments;
 
 -- List all countries in alphabetical order.
 
 select * from countries
 order by country_name;
 
--- List countries whose phone code is greater than 50.
+-- List countries with phone codes greater than 50 along with their names.
 
 select phone_code,
 country_name
@@ -134,7 +136,7 @@ where salary > 50000;
 -- Find the average salary of developers who use Java.
 
 select prog_lang,
-avg(salary) as ort_maas
+avg(salary) as avg_salary
 from developers
 where prog_lang='java';
 
@@ -145,18 +147,18 @@ salary
 from developers
 where salary between 45000 and 60000;
 
--- List the developers with the minimum and maximum salary in a single query.
+-- List the developer with the lowest and highest salary in a single query.
 
 select name,salary
 from developers
 where salary = (select max(salary) from developers)
 or salary=(select min(salary) from developers);
 
--- For each programming language, list the average salary and maximum salary.
+-- List the average and maximum salary for each programming language.
 
 select prog_lang,
-avg(salary) as ort_maas,
-max(salary) as max_maas
+avg(salary) as avg_salary,
+max(salary) as max_salary
 from developers
 group by prog_lang;
 
@@ -166,7 +168,7 @@ select name, prog_lang
 from developers
 where prog_lang = 'html' or prog_lang='css';
 
--- List developers whose salary is greater than 50000 ordered by salary in descending order.
+-- List developers whose salary is greater than 50000 in descending order of salary.
 
 select name,
 salary
@@ -174,99 +176,94 @@ from developers
 where salary > 50000
 order by salary desc;
 
--- List the number of students in each city.
+-- Count how many students are in each city.
 
-select sehir,
-count(isim) as kisi_sayisi
-from ogrenciler
-group by sehir;
+select city,
+count(name) as student_count
+from students
+group by city;
 
--- Find the total score of students studying in the Computer Engineering department.
+-- Find the total score of students in the Computer Engineering department.
 
-select bolum,
-sum(puan) as toplam_puan
-from ogrenciler
-group by bolum
-having bolum='bilgisayar muh.';
+select department,
+sum(score) as total_score
+from students
+group by department
+having department='computer engineering';
 
--- List departments whose base score is greater than 450 along with their campuses.
+-- List departments with a base score greater than 450 and their campus.
 
-select bolum,kampus
-from bolumler
-where taban_puanı > 450;
+select department,campus
+from departments
+where base_score > 450;
 
--- List students whose score is greater than 500 ordered by score in descending order.
+-- List students whose score is greater than 500, ordered by score descending.
 
-select isim
-from ogrenciler
-where puan>500
-order by puan desc;
+select name
+from students
+where score>500
+order by score desc;
 
--- List students whose names start with the letter "S".
+-- List students whose names start with “S”.
 
-select isim
-from ogrenciler
-where isim like 'S%';
+select name
+from students
+where name like 'S%';
 
--- List students who study in Istanbul and have a score greater than 500.
+-- List students studying in Istanbul with a score greater than 500.
 
-select isim
-from ogrenciler
-where sehir='istanbul' and puan>500;
+select name
+from students
+where city='istanbul' and score>500;
 
--- List the number of students in each department along with the department's base score.
+-- List the number of students in each department and the department’s base score.
 
-select o.bolum,count(o.isim) as ogrenci_sayisi,b.taban_puanı
-from ogrenciler o
-join bolumler b
-on o.bolum=b.bolum
-group by o.bolum,
-b.taban_puanı;
+select s.department,count(s.name) as student_count,d.base_score
+from students s
+join departments d
+on s.department=d.department
+group by s.department,
+d.base_score;
 
--- Using JOIN, list students' scores and their department information from the departments table.
+-- Retrieve students’ scores and departments using a JOIN with the department table.
 
--- List the names of students with scores greater than 500 in uppercase.
+select s.name,d.department,d.base_score
+from students s
+ join departments d
+on s.department=d.department;
 
--- Using JOIN, list students who belong to departments with a base score greater than 450.
+-- List the names of students with a score higher than 500 in uppercase.
 
--- List developers whose salary is higher than the average salary grouped by programming language.
+select  upper(name) as name_upper
+from students
+where score>500;
 
--- List each student's name, score, and their department’s campus.
+-- List departments with base scores higher than 450 and the names of students in those departments using JOIN.
 
+select s.name,d.department
+from students s
+join departments d
+on s.department=d.department
+where d.base_score>450;
+
+-- List developers whose salary is above the average, grouped by programming language.
+-- List each student’s name, score, and the campus of their department.
 -- List students studying in departments with a base score greater than 450.
-
--- List the names of students studying in Istanbul along with their department names.
-
+-- List the names of students in Istanbul along with their department.
 -- List the average score of students for each department.
-
 -- List students whose score is higher than their department’s base score.
-
 -- List developers along with their salary and country name.
-
--- List developers whose salary is above the average salary.
-
--- List developers who know Java or JavaScript ordered by salary in descending order.
-
--- List how many developers are in each country.
-
--- List the developer with the highest salary along with their country.
-
+-- List developers whose salary is above the average.
+-- List developers who know Java and JavaScript, ordered by salary descending.
+-- Count how many developers work in each country.
+-- List the developer with the highest salary and their country.
 -- List the student with the highest score in each department.
-
--- List students who study in Mathematics or Computer Engineering departments.
-
--- List students' names and departments in uppercase.
-
+-- List students in Mathematics or Computer Engineering departments.
+-- List students’ names and departments in uppercase.
 -- List developers whose salary is greater than 50000 and who use Java.
-
--- List the difference between students' scores and their department’s base score.
-
+-- List the difference between students’ scores and their department’s base score.
 -- List the average salary and number of developers in each country.
-
--- List students studying in departments located in the "Kuzey" campus.
-
--- List students whose score is greater than 500 and whose campus is "Güney".
-
+-- List students in departments located in the “North” campus.
+-- List students with a score greater than 500 in the “South” campus.
 -- List each developer’s programming language and country code.
-
 -- List developers whose salary is between 45000 and 60000 along with their programming language and country name.
