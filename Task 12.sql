@@ -382,9 +382,6 @@ FROM ogrenciler o
 JOIN bolumler b
 ON o.bolum = b.bolum;
 
--- List the average salary and number of developers in each country.
-
-
 
 -- List students in departments located in the “North” campus.
 
