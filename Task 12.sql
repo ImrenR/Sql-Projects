@@ -287,16 +287,27 @@ group by bolum;
 
 -- List the average score of students for each department.
 
+select bolum,
+round(avg(puan),0) as ort_puan
+from ogrenciler
+group by bolum;
 
 
 -- List students whose score is higher than their department’s base score.
 
-
+select o.isim
+from ogrenciler o
+join bolumler b
+on o.bolum=b.bolum
+where o.puan >  b.taban_puanı ;
 
 
 -- List developers along with their salary and country name.
 
-
+select d.name,d.salary,c.country_name
+from developers d
+left join countries c
+on d.id=c.id;
 
 
 -- List developers whose salary is above the average.
