@@ -335,10 +335,6 @@ join developers d
 on c.id=d.id
 group by c.country_name;
 
--- List the developer with the highest salary and their country.
-
-
-
 
 -- List the student with the highest score in each department.
 
