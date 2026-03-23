@@ -359,7 +359,8 @@ where bolum='Matematik' or bolum='Bilgisayar';
 
 -- List students’ names and departments in uppercase.
 
-
+select upper(isim) as name,upper(bolum) as depertmant,puan
+from ogrenciler;
 
 
 
