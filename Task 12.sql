@@ -283,17 +283,66 @@ where b.taban_puanı>450;
 
 
 -- List the average score of students for each department.
+
+
+
 -- List students whose score is higher than their department’s base score.
+
+
+
+
 -- List developers along with their salary and country name.
+
+
+
+
 -- List developers whose salary is above the average.
+
+
+
+
 -- List developers who know Java and JavaScript, ordered by salary descending.
+
+
+
 -- Count how many developers work in each country.
+
+
+
+
 -- List the developer with the highest salary and their country.
+
+
+
+
 -- List the student with the highest score in each department.
+
+
+
+
+
 -- List students in Mathematics or Computer Engineering departments.
+
+
+
+
+
 -- List students’ names and departments in uppercase.
+
+
+
+
+
 -- List developers whose salary is greater than 50000 and who use Java.
+
+
+
+
+
 -- List the difference between students’ scores and their department’s base score.
+
+
+
 -- List the average salary and number of developers in each country.
 -- List students in departments located in the “North” campus.
 -- List students with a score greater than 500 in the “South” campus.
