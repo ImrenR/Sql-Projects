@@ -367,7 +367,9 @@ from ogrenciler;
 -- List developers whose salary is greater than 50000 and who use Java.
 
 
-
+select name
+from developers
+where salary > 50000 and prog_lang='Java';
 
 
 -- List the difference between students’ scores and their department’s base score.
