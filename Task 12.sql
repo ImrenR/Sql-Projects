@@ -400,7 +400,11 @@ where b.kampus='Kuzey';
 
 -- List students with a score greater than 500 in the “South” campus.
 
-
+select o.isim
+from ogrenciler o
+join bolumler b
+on b.bolum=o.bolum
+where o.puan>500 and b.kampus='Güney';
 
 
 -- List each developer’s programming language and country code.
