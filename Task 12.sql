@@ -319,7 +319,10 @@ where salary > (select avg(salary) from developers)
 
 -- List developers who know Java and JavaScript, ordered by salary descending.
 
-
+select name,salary
+from developers
+where prog_lang in ('java', 'javascript')
+order by salary desc;
 
 -- Count how many developers work in each country.
 
