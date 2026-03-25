@@ -114,7 +114,7 @@ where month(d.alim_tarihi)=3;
    from kitaplar
    where kaynak='yabanci';
                 
--- Adının ilk harfi S olan kitapları listeleyin 
+-- Adının ilk harfi S olan kitapları listeleyin. 
 select kitapAdi
 from kitaplar
 where kitapAdi like 'S%';
